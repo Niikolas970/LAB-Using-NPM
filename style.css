@@ -284,3 +284,206 @@ body {
     color: var(--nasa-text);
     letter-spacing: 0.08em;
 }
+
+/* ================= FOOTER ================= */
+
+.footer {
+    background: var(--bg);
+    color: var(--text);
+    padding: 3rem 0 0;
+    border-top: 2px solid var(--border);
+    margin-top: 4rem;
+    position: relative;
+}
+
+.footer::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image:
+        radial-gradient(2px 2px at 20px 30px, var(--text), transparent),
+        radial-gradient(2px 2px at 40px 70px, var(--muted), transparent),
+        radial-gradient(1px 1px at 60px 110px, var(--text), transparent),
+        radial-gradient(2px 2px at 80px 40px, var(--muted), transparent);
+    background-size: 200px 200px;
+    opacity: .15;
+    pointer-events: none;
+}
+
+.footer-brand {
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 1.6rem;
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    gap: .75rem;
+    position: relative;
+    z-index: 1;
+}
+
+.footer-brand i {
+    color: var(--warning);
+    font-size: 2rem;
+}
+
+.footer-description {
+    color: var(--muted);
+    font-size: .95rem;
+    line-height: 1.7;
+    margin-bottom: 1rem;
+    position: relative;
+    z-index: 1;
+}
+
+.footer-tech {
+    display: flex;
+    flex-wrap: wrap;
+    gap: .5rem;
+    position: relative;
+    z-index: 1;
+}
+
+.tech-badge {
+    background: var(--card);
+    color: var(--text);
+    padding: .3rem .8rem;
+    border-radius: 20px;
+    font-size: .7rem;
+    border: 1px solid var(--border);
+}
+
+.footer-title {
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 1rem;
+    padding-bottom: .5rem;
+    position: relative;
+}
+
+.footer-title::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 35px;
+    height: 2px;
+    background: var(--warning);
+}
+
+.footer-team {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.footer-team li {
+    display: flex;
+    align-items: center;
+    gap: .75rem;
+    padding: .5rem;
+    border-radius: 8px;
+    transition: .3s;
+}
+
+.footer-team li:hover {
+    background: var(--card);
+}
+
+.team-avatar {
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    font-weight: 700;
+    font-size: .85rem;
+}
+
+.team-name {
+    flex: 1;
+    color: var(--text);
+    font-size: .9rem;
+}
+
+.team-role {
+    color: var(--muted);
+    font-size: .7rem;
+}
+
+.footer-contact p {
+    margin-bottom: .8rem;
+    display: flex;
+    align-items: center;
+    gap: .75rem;
+}
+
+.footer-contact i {
+    color: var(--primary);
+}
+
+.footer-contact a {
+    color: var(--muted);
+    text-decoration: none;
+}
+
+.footer-contact a:hover {
+    color: var(--text);
+}
+
+.footer-divider {
+    border: 0;
+    height: 1px;
+    background: linear-gradient(
+        to right,
+        transparent,
+        var(--border),
+        var(--primary),
+        var(--border),
+        transparent
+    );
+    margin: 2rem 0 1.5rem;
+}
+
+.footer-bottom {
+    padding-bottom: 1.5rem;
+    position: relative;
+    z-index: 1;
+}
+
+.footer-copyright,
+.footer-credits {
+    color: var(--muted);
+    font-size: .85rem;
+}
+
+@media (max-width: 768px) {
+    .footer-brand {
+        font-size: 1.3rem;
+    }
+
+    .footer-bottom .text-md-end {
+        text-align: left !important;
+        margin-top: .8rem;
+    }
+}
+
+@media (max-width: 576px) {
+    .footer {
+        padding: 1.5rem 0 0;
+    }
+
+    .footer-bottom .row {
+        text-align: center;
+    }
+
+    .footer-copyright,
+    .footer-credits {
+        font-size: .75rem;
+    }
+}
