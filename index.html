@@ -11,194 +11,204 @@
 </head>
 
 <body>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-        <div class="container">
-            <a class="navbar-brand" href="#">
-                <i class="bi bi-stars"></i>
-                Explorador APOD
-            </a>
-            <span class="navbar-text text-light-emphasis">
-                <i class="bi bi-nasa"></i> NASA
-            </span>
-        </div>
-    </nav>
-    <div class="container mt-4">
-        <div class="row">
-            <div class="col-lg-8">
-                <div class="card mb-4">
-                    <div class="card-body">
-                        <h5 class="card-title">
-                            <i class="bi bi-calendar-event"></i> Buscar APOD
-                        </h5>
-                        <div class="row g-3">
-                            <div class="col-md-8">
-                                <label for="datePicker" class="form-label">Selecciona una fecha:</label>
-                                <input type="date" id="datePicker" class="form-control" />
-                            </div>
-                            <div class="col-md-4 d-flex align-items-end">
-                                <button id="loadDateBtn" class="btn btn-primary w-100">
-                                    <i class="bi bi-search"></i> Cargar
-                                </button>
-                            </div>
-                        </div>
-                        <div id="errorMessage" class="alert alert-danger mt-3" style="display: none;"></div>
+
+    <body>
+        <nav class="navbar navbar-expand-lg navbar-dark">
+            <div class="container">
+
+                <a class="navbar-brand" href="#">
+                    <i class="bi bi-stars"></i>
+                    Explorador APOD
+                </a>
+
+                <div class="nasa-logo">
+                    <img src="logo.png" alt="NASA logo" />
+                    <div class="nasa-logo-label">
+                        <strong>NASA</strong>
+                        Foto astronómica del día
                     </div>
                 </div>
-                <div class="card mb-4">
-                    <div class="card-body">
-                        <div id="loadingSpinner" class="text-center my-5 loading-spinner">
-                            <div class="spinner-border text-primary" role="status">
-                                <span class="visually-hidden">Cargando...</span>
-                            </div>
-                            <p class="mt-2">Cargando APOD...</p>
-                        </div>
-                        <div id="apodContent" style="display: none;">
-                            <div class="d-flex justify-content-between align-items-start mb-3">
-                                <h2 id="apodTitle" class="mb-0">Título</h2>
-                                <button id="favoriteToggleBtn" class="btn btn-outline-warning favorite-btn">
-                                    <i class="bi bi-heart"></i> Favorito
-                                </button>
-                            </div>
-                            <p id="apodDate" class="text-muted">
-                                <i class="bi bi-calendar"></i> Fecha
-                            </p>
-                            <div id="mediaContainer" class="text-center mb-3">
-                                <img id="apodImage" class="apod-image" src="" alt="APOD Image" style="display: none;" />
-                                <div id="videoContainer" style="display: none;">
-                                    <iframe id="apodVideo" class="apod-video" src="" frameborder="0"
-                                        allowfullscreen></iframe>
+
+            </div>
+        </nav>
+        <div class="container mt-4">
+            <div class="row">
+                <div class="col-lg-8">
+                    <div class="card mb-4">
+                        <div class="card-body">
+                            <h5 class="card-title">
+                                <i class="bi bi-calendar-event"></i> Buscar APOD
+                            </h5>
+                            <div class="row g-3">
+                                <div class="col-md-8">
+                                    <label for="datePicker" class="form-label">Selecciona una fecha:</label>
+                                    <input type="date" id="datePicker" class="form-control" />
+                                </div>
+                                <div class="col-md-4 d-flex align-items-end">
+                                    <button id="loadDateBtn" class="btn btn-primary w-100">
+                                        <i class="bi bi-search"></i> Cargar
+                                    </button>
                                 </div>
                             </div>
-                            <div class="mt-3">
-                                <h5>
-                                    <i class="bi bi-info-circle"></i> Explicación
-                                </h5>
-                                <div id="apodExplanation" class="explanation-text">
-                                    Cargando explicación...
+                            <div id="errorMessage" class="alert alert-danger mt-3" style="display: none;"></div>
+                        </div>
+                    </div>
+                    <div class="card mb-4">
+                        <div class="card-body">
+                            <div id="loadingSpinner" class="text-center my-5 loading-spinner">
+                                <div class="spinner-border text-primary" role="status">
+                                    <span class="visually-hidden">Cargando...</span>
                                 </div>
+                                <p class="mt-2">Cargando APOD...</p>
                             </div>
-                            <p id="apodCopyright" class="text-muted mt-3" style="font-size: 0.9rem;">
-                                <i class="bi bi-c-circle"></i>
-                            </p>
+                            <div id="apodContent" style="display: none;">
+                                <div class="d-flex justify-content-between align-items-start mb-3">
+                                    <h2 id="apodTitle" class="mb-0">Título</h2>
+                                    <button id="favoriteToggleBtn" class="btn btn-outline-warning favorite-btn">
+                                        <i class="bi bi-heart"></i> Favorito
+                                    </button>
+                                </div>
+                                <p id="apodDate" class="text-muted">
+                                    <i class="bi bi-calendar"></i> Fecha
+                                </p>
+                                <div id="mediaContainer" class="text-center mb-3">
+                                    <img id="apodImage" class="apod-image" src="" alt="APOD Image"
+                                        style="display: none;" />
+                                    <div id="videoContainer" style="display: none;">
+                                        <iframe id="apodVideo" class="apod-video" src="" frameborder="0"
+                                            allowfullscreen></iframe>
+                                    </div>
+                                </div>
+                                <div class="mt-3">
+                                    <h5>
+                                        <i class="bi bi-info-circle"></i> Explicación
+                                    </h5>
+                                    <div id="apodExplanation" class="explanation-text">
+                                        Cargando explicación...
+                                    </div>
+                                </div>
+                                <p id="apodCopyright" class="text-muted mt-3" style="font-size: 0.9rem;">
+                                    <i class="bi bi-c-circle"></i>
+                                </p>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-            <div class="col-lg-4">
-                <div class="card">
-                    <div class="card-header bg-warning bg-opacity-10">
-                        <h5 class="card-title mb-0">
-                            <i class="bi bi-heart-fill text-warning"></i> Mis Favoritos
-                        </h5>
-                    </div>
-                    <div class="card-body">
-                        <div id="favoritesList">
-                            <p class="text-muted text-center">
-                                <i class="bi bi-heart"></i> No tienes favoritos guardados
-                            </p>
+                <div class="col-lg-4">
+                    <div class="card">
+                        <div class="card-header bg-warning bg-opacity-10">
+                            <h5 class="card-title mb-0">
+                                <i class="bi bi-heart-fill text-warning"></i> Mis Favoritos
+                            </h5>
                         </div>
-                        <div id="noFavoritesMessage" style="display: none;">
-                            <p class="text-muted text-center">
-                                <i class="bi bi-heart"></i> No tienes favoritos guardados
-                            </p>
+                        <div class="card-body">
+                            <div id="favoritesList">
+                                <p class="text-muted text-center">
+                                    <i class="bi bi-heart"></i> No tienes favoritos guardados
+                                </p>
+                            </div>
+                            <div id="noFavoritesMessage" style="display: none;">
+                                <p class="text-muted text-center">
+                                    <i class="bi bi-heart"></i> No tienes favoritos guardados
+                                </p>
+                            </div>
                         </div>
-                    </div>
-                    <div class="card-footer">
-                        <button id="clearFavoritesBtn" class="btn btn-outline-danger btn-sm w-100">
-                            <i class="bi bi-trash"></i> Limpiar Favoritos
-                        </button>
+                        <div class="card-footer">
+                            <button id="clearFavoritesBtn" class="btn btn-outline-danger btn-sm w-100">
+                                <i class="bi bi-trash"></i> Limpiar Favoritos
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-    <footer class="footer">
-        <div class="container">
-            <div class="row g-4">
-                <!-- Columna 1: Logo y descripción -->
-                <div class="col-lg-4 col-md-6">
-                    <div class="footer-brand">
-                        <i class="bi bi-stars"></i>
-                        <span>APOD Explorer</span>
+        <footer class="footer">
+            <div class="container">
+                <div class="row g-4">
+                    <!-- Columna 1: Logo y descripción -->
+                    <div class="col-lg-4 col-md-6">
+                        <div class="footer-brand">
+                            <i class="bi bi-stars"></i>
+                            <span>APOD Explorer</span>
+                        </div>
+                        <p class="footer-description">
+                            Explorador de la "Astronomy Picture of the Day" de la NASA.
+                            Proyecto colaborativo para el estudio de APIs y desarrollo web.
+                        </p>
+                        <div class="footer-tech">
+                            <span class="tech-badge">HTML5</span>
+                            <span class="tech-badge">CSS3</span>
+                            <span class="tech-badge">JavaScript</span>
+                            <span class="tech-badge">Bootstrap</span>
+                            <span class="tech-badge">NASA API</span>
+                        </div>
                     </div>
-                    <p class="footer-description">
-                        Explorador de la "Astronomy Picture of the Day" de la NASA.
-                        Proyecto colaborativo para el estudio de APIs y desarrollo web.
-                    </p>
-                    <div class="footer-tech">
-                        <span class="tech-badge">HTML5</span>
-                        <span class="tech-badge">CSS3</span>
-                        <span class="tech-badge">JavaScript</span>
-                        <span class="tech-badge">Bootstrap</span>
-                        <span class="tech-badge">NASA API</span>
+
+                    <div class="col-lg-3 col-md-6">
+                        <h5 class="footer-title">Equipo</h5>
+                        <ul class="footer-team">
+                            <li>
+                                <span class="team-avatar" style="background: var(--nasa-blue);">N</span>
+                                <span class="team-name">Nicolás Pirajan</span>
+                                <span class="team-role">Desarrollador</span>
+                            </li>
+                            <li>
+                                <span class="team-avatar" style="background: var(--nasa-gold);">L</span>
+                                <span class="team-name">Luis Imbachi</span>
+                                <span class="team-role">Desarrollador</span>
+                            </li>
+                            <li>
+                                <span class="team-avatar" style="background: var(--nasa-red);">L</span>
+                                <span class="team-name">Laura Romero</span>
+                                <span class="team-role">Desarrolladora</span>
+                            </li>
+                            <li>
+                                <span class="team-avatar" style="background: var(--nasa-cyan);">O</span>
+                                <span class="team-name">Oscar Yustres</span>
+                                <span class="team-role">Desarrollador</span>
+                            </li>
+                        </ul>
+                    </div>
+
+
+                    <div class="col-lg-3 col-md-6">
+                        <h5 class="footer-title">Contacto</h5>
+                        <div class="footer-contact">
+                            <p>
+                                <i class="bi bi-github"></i>
+                                <a href="https://github.com/Niikolas970/LAB-Using-NPM" target="_blank">
+                                    GitHub Repository
+                                </a>
+                            </p>
+                            <p>
+                                <i class="bi bi-globe"></i>
+                                <span>Proyecto Académico</span>
+                            </p>
+                        </div>
                     </div>
                 </div>
 
-                <div class="col-lg-3 col-md-6">
-                    <h5 class="footer-title">Equipo</h5>
-                    <ul class="footer-team">
-                        <li>
-                            <span class="team-avatar" style="background: var(--nasa-blue);">N</span>
-                            <span class="team-name">Nicolás Pirajan</span>
-                            <span class="team-role">Desarrollador</span>
-                        </li>
-                        <li>
-                            <span class="team-avatar" style="background: var(--nasa-gold);">L</span>
-                            <span class="team-name">Luis Imbachi</span>
-                            <span class="team-role">Desarrollador</span>
-                        </li>
-                        <li>
-                            <span class="team-avatar" style="background: var(--nasa-red);">L</span>
-                            <span class="team-name">Laura Romero</span>
-                            <span class="team-role">Desarrolladora</span>
-                        </li>
-                        <li>
-                            <span class="team-avatar" style="background: var(--nasa-cyan);">O</span>
-                            <span class="team-name">Oscar Yustres</span>
-                            <span class="team-role">Desarrollador</span>
-                        </li>
-                    </ul>
-                </div>
 
+                <hr class="footer-divider" />
 
-                <div class="col-lg-3 col-md-6">
-                    <h5 class="footer-title">Contacto</h5>
-                    <div class="footer-contact">
-                        <p>
-                            <i class="bi bi-github"></i>
-                            <a href="https://github.com/Niikolas970/LAB-Using-NPM" target="_blank">
-                                GitHub Repository
-                            </a>
-                        </p>
-                        <p>
-                            <i class="bi bi-globe"></i>
-                            <span>Proyecto Académico</span>
-                        </p>
+                <div class="footer-bottom">
+                    <div class="row align-items-center">
+                        <div class="col-md-6">
+                            <p class="footer-copyright">
+                                <i class="bi bi-c-circle"></i> 2026 APOD Explorer - Todos los derechos reservados
+                            </p>
+                        </div>
+                        <div class="col-md-6 text-md-end">
+                            <p class="footer-credits">
+                                <i class="bi bi-nasa"></i> Datos proporcionados por la NASA
+                                <span class="separator">|</span>
+                            </p>
+                        </div>
                     </div>
                 </div>
             </div>
-
-
-            <hr class="footer-divider" />
-
-            <div class="footer-bottom">
-                <div class="row align-items-center">
-                    <div class="col-md-6">
-                        <p class="footer-copyright">
-                            <i class="bi bi-c-circle"></i> 2026 APOD Explorer - Todos los derechos reservados
-                        </p>
-                    </div>
-                    <div class="col-md-6 text-md-end">
-                        <p class="footer-credits">
-                            <i class="bi bi-nasa"></i> Datos proporcionados por la NASA
-                            <span class="separator">|</span>
-                        </p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </footer>
-    <script src="app.js"></script>
-</body>
+        </footer>
+        <script src="app.js"></script>
+    </body>
 
 </html>
