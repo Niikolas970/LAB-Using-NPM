@@ -1,0 +1,483 @@
+[1mdiff --cc app.js[m
+[1mindex 0519729,f10b932..0000000[m
+[1m--- a/app.js[m
+[1m+++ b/app.js[m
+[36m@@@ -1,49 -1,257 +1,257 @@@[m
+[31m- const  datePicker = document.getElementById("datePicker");[m
+[31m- const errorMensaje = document.getElementById("errorMessage");[m
+[32m+ const API_KEY = "FBfrEJCbfzm5CytqoZel6z5mcRbQsG6MSXW51E39";[m
+[32m+ const BASE_URL = "https://api.nasa.gov/planetary/apod";[m
+  [m
+[31m- function validarFechas(){[m
+[31m-     const fechaSeleccionada = new Date(datePicker.value);[m
+[32m+ let currentAPOD = null;[m
+  [m
+[31m-     const hoy = new Date();[m
+[32m+ async function fetchAPOD(date = "") {[m
+[31m -  let url = `${BASE_URL}?api_key=${API_KEY}`;[m
+[32m++    let url = `${BASE_URL}?api_key=${API_KEY}`;[m
+  [m
+[31m-     hoy.setHours(0,0,0,0);[m
+[31m -  if (date) {[m
+[31m -    url += `&date=${date}`;[m
+[31m -  }[m
+[32m++    if (date) {[m
+[32m++        url += `&date=${date}`;[m
+[32m++    }[m
+[32m+ [m
+[31m -  const response = await fetch(url);[m
+[32m++    const response = await fetch(url);[m
+[32m+ [m
+[31m -  if (!response.ok) {[m
+[31m -    if (response.status === 429) {[m
+[31m -      throw new Error("Demasiadas solicitudes. Espera un momento e intenta de nuevo.");[m
+[32m++    if (!response.ok) {[m
+[32m++        if (response.status === 429) {[m
+[32m++            throw new Error("Demasiadas solicitudes. Espera un momento e intenta de nuevo.");[m
+[32m++        }[m
+[32m++        const errorData = await response.json();[m
+[32m++        throw new Error(errorData.msg || `Error HTTP: ${response.status}`);[m
+[32m+     }[m
+[31m -    const errorData = await response.json();[m
+[31m -    throw new Error(errorData.msg || `Error HTTP: ${response.status}`);[m
+[31m -  }[m
+  [m
+[31m-     if(fechaSeleccionada > hoy){[m
+[31m-         errorMensaje.textContent = ` No puedes seleccionar una fecha futura, por favor intentalo de nuevo`;[m
+[31m -  const data = await response.json();[m
+[31m -  return data;[m
+[32m++    const data = await response.json();[m
+[32m++    return data;[m
+[32m+ }[m
+[32m+ [m
+[32m+ function showLoading() {[m
+[31m -  document.getElementById("loadingSpinner").style.display = "block";[m
+[31m -  document.getElementById("apodContent").style.display = "none";[m
+[32m++    document.getElementById("loadingSpinner").style.display = "block";[m
+[32m++    document.getElementById("apodContent").style.display = "none";[m
+[32m+ }[m
+  [m
+[31m-         errorMensaje.style.display = "block";[m
+[32m+ function hideLoading() {[m
+[31m -  document.getElementById("loadingSpinner").style.display = "none";[m
+[31m -  document.getElementById("apodContent").style.display = "block";[m
+[32m++    document.getElementById("loadingSpinner").style.display = "none";[m
+[32m++    document.getElementById("apodContent").style.display = "block";[m
+[32m+ }[m
+  [m
+[31m-         return false;[m
+[32m+ function showError(message) {[m
+[31m -  const errorEl = document.getElementById("errorMessage");[m
+[31m -  errorEl.textContent = message;[m
+[31m -  errorEl.style.display = "block";[m
+[32m++    const errorEl = document.getElementById("errorMessage");[m
+[32m++    errorEl.textContent = message;[m
+[32m++    errorEl.style.display = "block";[m
+[32m+ }[m
+[32m+ [m
+[32m+ function hideError() {[m
+[31m -  document.getElementById("errorMessage").style.display = "none";[m
+[32m++    document.getElementById("errorMessage").style.display = "none";[m
+[32m+ }[m
+[32m+ [m
+[32m+ function displayAPOD(data) {[m
+[31m -  const titleEl = document.getElementById("apodTitle");[m
+[31m -  const dateEl = document.getElementById("apodDate");[m
+[31m -  const imageEl = document.getElementById("apodImage");[m
+[31m -  const videoContainer = document.getElementById("videoContainer");[m
+[31m -  const videoEl = document.getElementById("apodVideo");[m
+[31m -  const explanationEl = document.getElementById("apodExplanation");[m
+[31m -  const copyrightEl = document.getElementById("apodCopyright");[m
+[31m -[m
+[31m -  titleEl.textContent = data.title;[m
+[31m -  dateEl.innerHTML = `<i class="bi bi-calendar"></i> ${data.date}`;[m
+[31m -[m
+[31m -  if (data.media_type === "image") {[m
+[31m -    imageEl.src = data.url;[m
+[31m -    imageEl.alt = data.title;[m
+[31m -    imageEl.style.display = "block";[m
+[31m -    videoContainer.style.display = "none";[m
+[31m -  } else if (data.media_type === "video") {[m
+[31m -    videoEl.src = data.url;[m
+[31m -    videoEl.title = data.title;[m
+[31m -    videoContainer.style.display = "block";[m
+[31m -    imageEl.style.display = "none";[m
+[31m -  }[m
+[31m -[m
+[31m -  explanationEl.textContent = data.explanation;[m
+[31m -[m
+[31m -  if (data.copyright) {[m
+[31m -    copyrightEl.innerHTML = `<i class="bi bi-c-circle"></i> ${data.copyright}`;[m
+[31m -    copyrightEl.style.display = "block";[m
+[31m -  } else {[m
+[31m -    copyrightEl.style.display = "none";[m
+[31m -  }[m
+[31m -[m
+[31m -  updateFavoriteButton(data.date);[m
+[32m++    const titleEl = document.getElementById("apodTitle");[m
+[32m++    const dateEl = document.getElementById("apodDate");[m
+[32m++    const imageEl = document.getElementById("apodImage");[m
+[32m++    const videoContainer = document.getElementById("videoContainer");[m
+[32m++    const videoEl = document.getElementById("apodVideo");[m
+[32m++    const explanationEl = document.getElementById("apodExplanation");[m
+[32m++    const copyrightEl = document.getElementById("apodCopyright");[m
+[32m++[m
+[32m++    titleEl.textContent = data.title;[m
+[32m++    dateEl.innerHTML = `<i class="bi bi-calendar"></i> ${data.date}`;[m
+[32m++[m
+[32m++    if (data.media_type === "image") {[m
+[32m++        imageEl.src = data.url;[m
+[32m++        imageEl.alt = data.title;[m
+[32m++        imageEl.style.display = "block";[m
+[32m++        videoContainer.style.display = "none";[m
+[32m++    } else if (data.media_type === "video") {[m
+[32m++        videoEl.src = data.url;[m
+[32m++        videoEl.title = data.title;[m
+[32m++        videoContainer.style.display = "block";[m
+[32m++        imageEl.style.display = "none";[m
+[32m +    }[m
+[32m +[m
+[31m-     errorMensaje.style.display = "none";[m
+[32m++    explanationEl.textContent = data.explanation;[m
+[32m +[m
+[31m-     return true;[m
+[32m++    if (data.copyright) {[m
+[32m++        copyrightEl.innerHTML = `<i class="bi bi-c-circle"></i> ${data.copyright}`;[m
+[32m++        copyrightEl.style.display = "block";[m
+[32m++    } else {[m
+[32m++        copyrightEl.style.display = "none";[m
+[32m++    }[m
+[32m++[m
+[32m++    updateFavoriteButton(data.date);[m
+  }[m
+[31m- const btnData = document.getElementById("loadDateBtn");[m
+  [m
+[31m- btnData.addEventListener("click", function(){[m
+[31m-     if (!validarFechas()){[m
+[31m-         return[m
+[32m+ function updateFavoriteButton(date) {[m
+[31m -  const favBtn = document.getElementById("favoriteToggleBtn");[m
+[31m -  const favorites = getFavorites();[m
+[31m -  const isFavorite = favorites.some((fav) => fav.date === date);[m
+[31m -[m
+[31m -  if (isFavorite) {[m
+[31m -    favBtn.innerHTML = `<i class="bi bi-heart-fill"></i> Favorito`;[m
+[31m -    favBtn.classList.remove("btn-outline-warning");[m
+[31m -    favBtn.classList.add("btn-warning");[m
+[31m -  } else {[m
+[31m -    favBtn.innerHTML = `<i class="bi bi-heart"></i> Favorito`;[m
+[31m -    favBtn.classList.remove("btn-warning");[m
+[31m -    favBtn.classList.add("btn-outline-warning");[m
+[31m -  }[m
+[32m++    const favBtn = document.getElementById("favoriteToggleBtn");[m
+[32m++    const favorites = getFavorites();[m
+[32m++    const isFavorite = favorites.some((fav) => fav.date === date);[m
+[32m++[m
+[32m++    if (isFavorite) {[m
+[32m++        favBtn.innerHTML = `<i class="bi bi-heart-fill"></i> Favorito`;[m
+[32m++        favBtn.classList.remove("btn-outline-warning");[m
+[32m++        favBtn.classList.add("btn-warning");[m
+[32m++    } else {[m
+[32m++        favBtn.innerHTML = `<i class="bi bi-heart"></i> Favorito`;[m
+[32m++        favBtn.classList.remove("btn-warning");[m
+[32m++        favBtn.classList.add("btn-outline-warning");[m
+[32m++    }[m
+[32m+ }[m
+[32m+ [m
+[32m+ async function loadAPOD(date = "") {[m
+[31m -  showLoading();[m
+[31m -  hideError();[m
+[31m -[m
+[31m -  try {[m
+[31m -    const data = await fetchAPOD(date);[m
+[31m -    currentAPOD = data;[m
+[31m -    displayAPOD(data);[m
+[31m -    hideLoading();[m
+[31m -[m
+[31m -    const dateInput = document.getElementById("datePicker");[m
+[31m -    if (dateInput) {[m
+[31m -      dateInput.value = data.date;[m
+[32m++    showLoading();[m
+[32m++    hideError();[m
+[32m++[m
+[32m++    try {[m
+[32m++        const data = await fetchAPOD(date);[m
+[32m++        currentAPOD = data;[m
+[32m++        displayAPOD(data);[m
+[32m++        hideLoading();[m
+[32m++[m
+[32m++        const dateInput = document.getElementById("datePicker");[m
+[32m++        if (dateInput) {[m
+[32m++            dateInput.value = data.date;[m
+[32m++        }[m
+[32m++    } catch (error) {[m
+[32m++        hideLoading();[m
+[32m++        showError(error.message);[m
+      }[m
+[31m-     console.log("Fecha validada");[m
+[31m-     [m
+[31m- })[m
+[31m -  } catch (error) {[m
+[31m -    hideLoading();[m
+[31m -    showError(error.message);[m
+[31m -  }[m
+[32m+ }[m
+[32m+ [m
+[32m+ function setupDateInput() {[m
+[31m -  const dateInput = document.getElementById("datePicker");[m
+[32m++    const dateInput = document.getElementById("datePicker");[m
+  [m
+[31m- function obtenerFavorito() {[m
+[31m-     return JSON.parse(localStorage.getItem("favoritos")) || [];[m
+[31m -  const today = new Date().toISOString().split("T")[0];[m
+[31m -  dateInput.setAttribute("max", today);[m
+[31m -  dateInput.setAttribute("min", "1995-06-16");[m
+[31m -  dateInput.value = today;[m
+[32m++    const today = new Date().toISOString().split("T")[0];[m
+[32m++    dateInput.setAttribute("max", today);[m
+[32m++    dateInput.setAttribute("min", "1995-06-16");[m
+[32m++    dateInput.value = today;[m
+  }[m
+  [m
+[31m- function guardarFavoritos(apod){[m
+[31m-     const favoritos = obtenerFavorito();[m
+[32m+ function handleDateChange() {[m
+[31m -  const dateInput = document.getElementById("datePicker");[m
+[31m -  const selectedDate = dateInput.value;[m
+[31m -  const today = new Date().toISOString().split("T")[0];[m
+[31m -  console.log(dateInput);[m
+[31m -  console.log(selectedDate);[m
+[31m -  console.log(today);[m
+[31m -[m
+[31m -  hideError();[m
+[31m -[m
+[31m -  if (selectedDate > today) {[m
+[31m -    showError("No puedes seleccionar una fecha futura. La NASA aún no tiene esos datos.");[m
+[31m -    dateInput.value = today;[m
+[31m -    return;[m
+[31m -  }[m
+[32m++    const dateInput = document.getElementById("datePicker");[m
+[32m++    const selectedDate = dateInput.value;[m
+[32m++    const today = new Date().toISOString().split("T")[0];[m
+[32m++    console.log(dateInput);[m
+[32m++    console.log(selectedDate);[m
+[32m++    console.log(today);[m
+[32m +[m
+[31m-     const existe = favoritos.some(favorito => favoritos.date === apod.date);[m
+[32m++    hideError();[m
+[32m++[m
+[32m++    if (selectedDate > today) {[m
+[32m++        showError("No puedes seleccionar una fecha futura. La NASA aún no tiene esos datos.");[m
+[32m++        dateInput.value = today;[m
+[32m++        return;[m
+[32m++    }[m
+  [m
+[31m-     if(existe){[m
+[31m-         alert ("Este ya esta guardado en favoritos");[m
+[31m-         return[m
+[31m -  if (selectedDate < "1995-06-16") {[m
+[31m -    showError("La primera APOD fue publicada el 16 de junio de 1995.");[m
+[31m -    dateInput.value = "1995-06-16";[m
+[31m -    return;[m
+[31m -  }[m
+[32m++    if (selectedDate < "1995-06-16") {[m
+[32m++        showError("La primera APOD fue publicada el 16 de junio de 1995.");[m
+[32m++        dateInput.value = "1995-06-16";[m
+[32m++        return;[m
+[32m +    }[m
+[31m-     favoritos.push(apod);[m
+  [m
+[31m-     localStorage.setItem("favoritos"), JSON.stringify(favoritos);[m
+[31m- }[m
+[31m -  loadAPOD(selectedDate);[m
+[32m++    loadAPOD(selectedDate);[m
+[32m+ }[m
+[32m+ [m
+[32m+ function getFavorites() {[m
+[31m -  const favorites = localStorage.getItem("apod-favorites");[m
+[31m -  return favorites ? JSON.parse(favorites) : [];[m
+[32m++    const favorites = localStorage.getItem("apod-favorites");[m
+[32m++    return favorites ? JSON.parse(favorites) : [];[m
+[32m+ }[m
+[32m+ [m
+[32m+ function saveFavorites(favorites) {[m
+[31m -  localStorage.setItem("apod-favorites", JSON.stringify(favorites));[m
+[32m++    localStorage.setItem("apod-favorites", JSON.stringify(favorites));[m
+[32m+ }[m
+[32m+ [m
+[32m+ function toggleFavorite() {[m
+[31m -  if (!currentAPOD) return;[m
+[31m -[m
+[31m -  const favorites = getFavorites();[m
+[31m -  const existingIndex = favorites.findIndex((fav) => fav.date === currentAPOD.date);[m
+[31m -[m
+[31m -  if (existingIndex !== -1) {[m
+[31m -    favorites.splice(existingIndex, 1);[m
+[31m -  } else {[m
+[31m -    favorites.push({[m
+[31m -      date: currentAPOD.date,[m
+[31m -      title: currentAPOD.title,[m
+[31m -      url: currentAPOD.url,[m
+[31m -      media_type: currentAPOD.media_type,[m
+[31m -    });[m
+[31m -  }[m
+[32m++    if (!currentAPOD) return;[m
+[32m++[m
+[32m++    const favorites = getFavorites();[m
+[32m++    const existingIndex = favorites.findIndex((fav) => fav.date === currentAPOD.date);[m
+[32m++[m
+[32m++    if (existingIndex !== -1) {[m
+[32m++        favorites.splice(existingIndex, 1);[m
+[32m++    } else {[m
+[32m++        favorites.push({[m
+[32m++            date: currentAPOD.date,[m
+[32m++            title: currentAPOD.title,[m
+[32m++            url: currentAPOD.url,[m
+[32m++            media_type: currentAPOD.media_type,[m
+[32m++        });[m
+[32m++    }[m
+[32m+ [m
+[31m -  saveFavorites(favorites);[m
+[31m -  renderFavorites();[m
+[31m -  updateFavoriteButton(currentAPOD.date);[m
+[32m++    saveFavorites(favorites);[m
+[32m++    renderFavorites();[m
+[32m++    updateFavoriteButton(currentAPOD.date);[m
+[32m+ }[m
+[32m+ [m
+[32m+ function removeFavorite(date) {[m
+[31m -  let favorites = getFavorites();[m
+[31m -  favorites = favorites.filter((fav) => fav.date !== date);[m
+[31m -  saveFavorites(favorites);[m
+[31m -  renderFavorites();[m
+[31m -[m
+[31m -  if (currentAPOD && currentAPOD.date === date) {[m
+[31m -    updateFavoriteButton(date);[m
+[31m -  }[m
+[32m++    let favorites = getFavorites();[m
+[32m++    favorites = favorites.filter((fav) => fav.date !== date);[m
+[32m++    saveFavorites(favorites);[m
+[32m++    renderFavorites();[m
+[32m++[m
+[32m++    if (currentAPOD && currentAPOD.date === date) {[m
+[32m++        updateFavoriteButton(date);[m
+[32m++    }[m
+[32m+ }[m
+[32m+ [m
+[32m+ function clearAllFavorites() {[m
+[31m -  localStorage.removeItem("apod-favorites");[m
+[31m -  renderFavorites();[m
+[32m++    localStorage.removeItem("apod-favorites");[m
+[32m++    renderFavorites();[m
+[32m+ [m
+[31m -  if (currentAPOD) {[m
+[31m -    updateFavoriteButton(currentAPOD.date);[m
+[31m -  }[m
+[32m++    if (currentAPOD) {[m
+[32m++        updateFavoriteButton(currentAPOD.date);[m
+[32m++    }[m
+[32m+ }[m
+[32m+ [m
+[32m+ function renderFavorites() {[m
+[31m -  const favoritesListEl = document.getElementById("favoritesList");[m
+[31m -  const noFavoritesMsg = document.getElementById("noFavoritesMessage");[m
+[31m -  const favorites = getFavorites();[m
+[32m++    const favoritesListEl = document.getElementById("favoritesList");[m
+[32m++    const noFavoritesMsg = document.getElementById("noFavoritesMessage");[m
+[32m++    const favorites = getFavorites();[m
+[32m+ [m
+[31m -  favoritesListEl.innerHTML = "";[m
+[32m++    favoritesListEl.innerHTML = "";[m
+[32m+ [m
+[31m -  if (favorites.length === 0) {[m
+[31m -    favoritesListEl.innerHTML = `[m
+[32m++    if (favorites.length === 0) {[m
+[32m++        favoritesListEl.innerHTML = `[m
+[32m+       <p class="text-muted text-center">[m
+[32m+         <i class="bi bi-heart"></i> No tienes favoritos guardados[m
+[32m+       </p>`;[m
+[31m -    noFavoritesMsg.style.display = "none";[m
+[31m -    return;[m
+[31m -  }[m
+[31m -[m
+[31m -  noFavoritesMsg.style.display = "none";[m
+[31m -[m
+[31m -  favorites.forEach((fav) => {[m
+[31m -    const favItem = document.createElement("div");[m
+[31m -    favItem.className = "favorite-item d-flex justify-content-between align-items-center mb-2 p-2 border rounded";[m
+[32m++        noFavoritesMsg.style.display = "none";[m
+[32m++        return;[m
+[32m++    }[m
+[32m+ [m
+[31m -    const link = document.createElement("span");[m
+[31m -    link.textContent = `${fav.title} (${fav.date})`;[m
+[31m -    link.style.cursor = "pointer";[m
+[31m -    link.className = "text-truncate";[m
+[31m -    link.addEventListener("click", () => {[m
+[31m -      loadAPOD(fav.date);[m
+[31m -    });[m
+[32m++    noFavoritesMsg.style.display = "none";[m
+[32m+ [m
+[31m -    const removeBtn = document.createElement("button");[m
+[31m -    removeBtn.className = "btn btn-outline-danger btn-sm ms-2";[m
+[31m -    removeBtn.innerHTML = `<i class="bi bi-trash"></i>`;[m
+[31m -    removeBtn.addEventListener("click", (e) => {[m
+[31m -      e.stopPropagation();[m
+[31m -      removeFavorite(fav.date);[m
+[32m++    favorites.forEach((fav) => {[m
+[32m++        const favItem = document.createElement("div");[m
+[32m++        favItem.className = "favorite-item d-flex justify-content-between align-items-center mb-2 p-2 border rounded";[m
+[32m++[m
+[32m++        const link = document.createElement("span");[m
+[32m++        link.textContent = `${fav.title} (${fav.date})`;[m
+[32m++        link.style.cursor = "pointer";[m
+[32m++        link.className = "text-truncate";[m
+[32m++        link.addEventListener("click", () => {[m
+[32m++            loadAPOD(fav.date);[m
+[32m++        });[m
+[32m++[m
+[32m++        const removeBtn = document.createElement("button");[m
+[32m++        removeBtn.className = "btn btn-outline-danger btn-sm ms-2";[m
+[32m++        removeBtn.innerHTML = `<i class="bi bi-trash"></i>`;[m
+[32m++        removeBtn.addEventListener("click", (e) => {[m
+[32m++            e.stopPropagation();[m
+[32m++            removeFavorite(fav.date);[m
+[32m++        });[m
+[32m++[m
+[32m++        favItem.appendChild(link);[m
+[32m++        favItem.appendChild(removeBtn);[m
+[32m++        favoritesListEl.appendChild(favItem);[m
+[32m+     });[m
+[31m -[m
+[31m -    favItem.appendChild(link);[m
+[31m -    favItem.appendChild(removeBtn);[m
+[31m -    favoritesListEl.appendChild(favItem);[m
+[31m -  });[m
+[32m+ }[m
+[32m+ [m
+[32m+ document.addEventListener("DOMContentLoaded", () => {[m
+[31m -  setupDateInput();[m
+[31m -  loadAPOD();[m
+[31m -  renderFavorites();[m
+[31m -[m
+[31m -  document.getElementById("loadDateBtn").addEventListener("click", handleDateChange);[m
+[31m -  document.getElementById("datePicker").addEventListener("change", handleDateChange);[m
+[31m -  document.getElementById("favoriteToggleBtn").addEventListener("click", toggleFavorite);[m
+[31m -  document.getElementById("clearFavoritesBtn").addEventListener("click", clearAllFavorites);[m
+[32m++    setupDateInput();[m
+[32m++    loadAPOD();[m
+[32m++    renderFavorites();[m
+[32m++[m
+[32m++    document.getElementById("loadDateBtn").addEventListener("click", handleDateChange);[m
+[32m++    document.getElementById("datePicker").addEventListener("change", handleDateChange);[m
+[32m++    document.getElementById("favoriteToggleBtn").addEventListener("click", toggleFavorite);[m
+[32m++    document.getElementById("clearFavoritesBtn").addEventListener("click", clearAllFavorites);[m
+[32m+ });[m
+[1mdiff --cc index.html[m
+[1mindex b4d82c6,a966923..0000000[m
+[1m--- a/index.html[m
+[1m+++ b/index.html[m
+[36m@@@ -6,14 -5,10 +6,15 @@@[m
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">[m
+      <link rel="stylesheet" href="style.css">[m
+      <title>ApiNasa</title>
